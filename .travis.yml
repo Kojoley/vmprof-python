@@ -25,6 +25,7 @@ install:
 script:
   - py.test vmprof/ -vrs
   - py.test jitlog/ -vrs
+  - python -m vmprof -o test.vmprof vmprofdemo.py && vmprofshow test.vmprof
 
 notifications:
   irc:
