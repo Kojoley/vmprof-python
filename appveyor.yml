@@ -81,8 +81,6 @@ build_script:
 test_script:
   # Run the project tests
   - pytest vmprof/ -vrs
-  - mkdir tmp && cd tmp
-  - python -m vmprof -o test.vmprof ../vmprofdemo.py && vmprofshow test.vmprof
 
 after_test:
   # If tests are successful, create binary packages for the project.
