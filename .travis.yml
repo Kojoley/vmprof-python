@@ -18,6 +18,7 @@ before_install:
   - sudo apt-get install -y libdwarf-dev
   - sudo apt-get install -y libelfg0-dev
   - sudo apt-get install -y libunwind8-dev
+  - python size_test.py
 
 install:
   - pip install .
