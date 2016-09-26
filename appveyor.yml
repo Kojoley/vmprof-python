@@ -59,10 +59,10 @@ install:
   - python -m pip install --disable-pip-version-check --upgrade pip
 
   # Upgrade wheel setuptools virtualenv
-  - python -m pip install --upgrade wheel setuptools virtualenv
+  - pip install --upgrade wheel setuptools virtualenv
 
   # Create virtualenv
-  - python -m virtualenv venv
+  - virtualenv venv
 
   # Activate virtualenv
   - venv\Scripts\activate.bat
@@ -71,25 +71,26 @@ install:
   - echo "%VIRTUAL_ENV%"
   - where python
 
-  # Upgrade virtualenv packages
-  - python -m pip install --upgrade pip wheel setuptools pytest
+  # Install pytest (all other dependencies will be resolved automatically)
+  - pip install pytest
 
 build_script:
-  # Build the compiled extension
-  - python -m pip install .
+  # Build and install the extension
+  - pip install .
 
 test_script:
   # Run the project tests
-  - python -m pytest vmprof/ -vrs
-  - python -m vmprof -o test.vmprof vmprofdemo.py && vmprofshow test.vmprof
+  - pytest vmprof/ -vrs
+  - mkdir tmp && cd tmp
+  - python -m vmprof -o test.vmprof ../vmprofdemo.py && vmprofshow test.vmprof
 
-#after_test:
-#  # If tests are successful, create binary packages for the project.
-#  - "python setup.py bdist_wheel"
-#  - "python setup.py bdist_wininst"
-#  - "python setup.py bdist_msi"
-#  - ps: "ls dist"
-#
-#artifacts:
-#  # Archive the generated packages in the ci.appveyor.com build report.
-#  - path: dist\*
+after_test:
+  # If tests are successful, create binary packages for the project.
+  - python setup.py bdist_wheel
+  - python setup.py bdist_wininst
+  - python setup.py bdist_msi
+  - ps: "ls dist"
+
+artifacts:
+  # Archive the generated packages in the ci.appveyor.com build report.
+  - path: dist\*
