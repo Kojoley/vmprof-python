@@ -56,21 +56,31 @@ install:
 
   # Upgrade to the latest version of pip to avoid it displaying warnings
   # about it being out of date.
-  - "pip install --disable-pip-version-check --user --upgrade pip"
+  - python -m pip install --disable-pip-version-check --upgrade pip
 
-  # Install the build dependencies of the project. If some dependencies contain
-  # compiled extensions and are not provided as pre-built wheel packages,
-  # pip will build them from source using the MSVC compiler matching the
-  # target Python version and architecture
-  - "pip install pytest six requests backports.shutil_which"
+  # Upgrade wheel setuptools virtualenv
+  - python -m pip install --upgrade wheel setuptools virtualenv
+
+  # Create virtualenv
+  - python -m virtualenv venv
+
+  # Activate virtualenv
+  - venv\Scripts\activate.bat
+
+  # Ensure that we are in virtualenv
+  - echo "%VIRTUAL_ENV%"
+  - where python
+
+  # Upgrade virtualenv packages
+  - python -m pip install --upgrade pip wheel setuptools pytest
 
 build_script:
   # Build the compiled extension
-  - pip install .
+  - python -m pip install .
 
 test_script:
   # Run the project tests
-  - "py.test vmprof/ -vrs"
+  - python -m pytest vmprof/ -vrs
   - python -m vmprof -o test.vmprof vmprofdemo.py && vmprofshow test.vmprof
 
 #after_test:
